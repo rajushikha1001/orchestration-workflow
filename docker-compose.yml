@@ -1,0 +1,23 @@
+services:
+  app:
+    build: ./app
+    container_name: rag_app
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+    volumes:
+      - ./data:/app/data
+      - ./index.json:/app/index.json
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    # Ollama often requires local host device access for acceleration; simple launch example:
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_data:/root/.ollama
+    # If you plan to use Hugging Face models with Ollama, follow Ollama docs to pull the model inside the container.
